@@ -8,7 +8,7 @@
       </thead>
       <tbody>
       <tr v-for="item in items" v-on:click="onClick(item)">
-        <td v-for="key in keys">{{ item[key] }}</td>
+        <td v-for="key in keys" v-html="item[key]"></td>
       </tr>
       </tbody>
     </table>
@@ -32,7 +32,10 @@
 
       if (trend.range == day) {
 
-        return '高: ' + trend.max + ' ' + '低: ' + trend.min + ' ' + '高（时间）: ' + trend.maxOffset + '最大涨幅:' + trend.maxPercent
+        return '<p>' + '高: ' + trend.max + '</p>' +
+          '<p>' + '低: ' + trend.min + '</p>' +
+          '<p>' + '高（时间）: ' + trend.maxOffset + '天' + '</p>' +
+          '<p>' + '最大涨幅: ' + trend.maxPercent + '</p>'
       }
     }
 
@@ -89,18 +92,20 @@
     margin: auto;
     border: 2px solid #42b983;
     border-radius: 3px;
+    width: 1408px;
     background-color: #fff;
   }
 
   th {
     background-color: #42b983;
-    color: rgba(255,255,255,0.66);
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+    /*color: rgba(255,255,255,0.66);*/
+
+    text-align: center;
+    min-width: 30px;
+    width: 160px;
+    float: left;
+    padding: 10px 20px;
   }
 
   td {
@@ -111,6 +116,8 @@
   th, td {
     text-align: center;
     min-width: 30px;
+    width: 160px;
+    float: left;
     padding: 10px 20px;
   }
 

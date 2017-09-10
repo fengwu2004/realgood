@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-let host = 'http://localhost:8888/'
+let host = 'http://123.207.213.131:8888/'
 let loginUrl = 'http://123.207.213.131:8080/dist/login.html'
 
 function networkManager() {
