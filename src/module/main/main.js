@@ -22,18 +22,30 @@ var vm = new Vue({
   }
 })
 
-new Vue({
+var vm1 = new Vue({
   el: '#app',
   components: { hello },
   data:function() {
     return {
       stockid:'',
+      excelFile:null
     }
   },
-  methods:{
-    onUpload:function(data) {
-      
+  methods: {
+    onUpload: function(data) {
+    
       doUpload(data)
+    },
+    filesChange(event) {
+      
+      var formData = new FormData()
+    
+      formData.append('upload', event.target.files[0])
+  
+      network.uploadInputFile(formData, function() {
+        
+        console.log('上传成功')
+      })
     }
   }
 })
@@ -51,6 +63,8 @@ function showAlertBox(title, message, buttons) {
 }
 
 function doUpload(data) {
+  
+  console.log(vm1.excelFile)
   
   if (data.company.length == 0 || data.consultor.length == 0 || data.focus.length == 0) {
     

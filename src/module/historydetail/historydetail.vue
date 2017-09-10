@@ -1,24 +1,36 @@
 <template>
   <div>
-  <table v-show="items.length != 0">
-    <thead>
+    <table v-show="items.length != 0">
+      <thead>
       <tr>
         <th v-for="title in titles" v-bind:key="title">{{ title }}</th>
       </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
       <tr v-for="item in items" v-on:click="onClick(item)">
         <td v-for="key in keys">{{ item[key] }}</td>
       </tr>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script>
   export default {
-    name:'smarttable',
-    props:['titles', 'keys', 'items']
+    data:function() {
+      return {
+        titles:['时间', '分析师', '所属公司'],
+        keys:['time', 'name', 'company'],
+      }
+    },
+    name:'historydetailtable',
+    props:['items'],
+    methods:{
+      onClick:function(item) {
+
+        window.location = './analyse.html?name=' + item.name + '&company=' + item.company
+      }
+    }
   }
 
 </script>

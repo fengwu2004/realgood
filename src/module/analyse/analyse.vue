@@ -1,8 +1,17 @@
 <template>
-  <div class="main">
-    <div>
-      <smarttable v-bind:titles="titles" v-bind:keys="keys" v-bind:items="items"></smarttable>
-    </div>
+  <div>
+    <table v-show="items.length != 0">
+      <thead>
+      <tr>
+        <th v-for="title in titles" v-bind:key="title">{{ title }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="item in items" v-on:click="onClick(item)">
+        <td v-for="key in keys">{{ item[key] }}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -23,7 +32,7 @@
 
       if (trend.range == day) {
 
-        return 'Max: ' + trend.max + ' ' + 'Min: ' + trend.min + ' ' + 'O: ' + trend.maxOffset + 'Percent:' + trend.maxPercent
+        return '高: ' + trend.max + ' ' + '低: ' + trend.min + ' ' + '高（时间）: ' + trend.maxOffset + '最大涨幅:' + trend.maxPercent
       }
     }
 
@@ -32,25 +41,23 @@
 
   export default {
     name:'analyse',
-    props:['results'],
+    props:['suggeststrends'],
     components:{ smarttable },
     computed:{
       items:function() {
 
         var temps = []
 
-        var recommondsTrends = this.results.recommondsTrends
+        for (var i = 0; i < this.suggeststrends.length; ++i) {
 
-        for (var i = 0; i < recommondsTrends.length; ++i) {
-
-          var item = recommondsTrends[i]
+          var item = this.suggeststrends[i]
 
           var trends = item.trends
 
-          var recommond = item.recommond
+          var suggeststock = item.suggeststock
 
           var temp = {
-            info:new Date(recommond.date).toLocaleDateString() + ' ' + recommond.stockname,
+            info:new Date(suggeststock.date).toLocaleDateString() + ' ' + suggeststock.stockName,
             day1: getTrend(1, trends),
             day3: getTrend(3, trends),
             day5: getTrend(5, trends),
@@ -68,92 +75,43 @@
     data:function() {
 
       return {
-        titles:['推荐', 'day-1', 'day-3', 'day-5', 'day-10', 'day-20', 'day-60'],
+        titles:['关注', 'day-1', 'day-3', 'day-5', 'day-10', 'day-20', 'day-60'],
         keys:['info', 'day1', 'day3', 'day5', 'day10', 'day20', 'day60'],
       }
     },
-    methods:{
-
-    }
   }
 
 </script>
 
 <style scoped>
 
-  .main {
-
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: 0;
-  }
-
-  .bg {
-    position: absolute;
-    left:0;
-    right:0;
-    top:0;
-    bottom:0;
-    margin: 0;
-    background-color: #9D9D9D;
-    opacity: 0.4;
-    z-index: 2;
-  }
-
-  .content {
-    border-radius: 5px;
-    background-color: white;
-    position: absolute;
-    width: 80%;
-    max-width: 300px;
-    top: 20%;
-    left: 0;
-    right: 0;
+  table {
     margin: auto;
-    z-index: 100;
-  }
-
-  .content > p {
-
-    text-align: center;
-    padding: 10px;
-  }
-
-  .content > div {
-
-    padding: 5px;
-    width: 90%;
-    margin: 10px auto;
-  }
-
-  label {
-
-    padding: 0 5px;
-    width: 30%;
-    display: inline-block;
-  }
-
-  input {
-
-    border: 1px solid;
-  }
-
-  .btn {
-
-    width: 85% !important;
-    background-color: #42b983;
-    margin: 10px auto;
-    text-align: center;
+    border: 2px solid #42b983;
     border-radius: 3px;
-    color: white;
+    background-color: #fff;
   }
 
-  .btn:active {
+  th {
+    background-color: #42b983;
+    color: rgba(255,255,255,0.66);
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-size: 0.8rem;
+  }
 
-    background-color: aquamarine;
+  td {
+    background-color: #f9f9f9;
+    font-size: 0.7rem;
+  }
+
+  th, td {
+    text-align: center;
+    min-width: 30px;
+    padding: 10px 20px;
   }
 
 </style>

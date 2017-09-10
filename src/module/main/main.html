@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimum-scale=1, maximum-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>股票小助手</title>
-    <link rel="stylesheet" type="text/css" href="static/app.css">
+    <link rel="stylesheet" type="text/css" href="/static/app.css">
   </head>
   <body>
     <div id="app">
-      <hello v-on:upload="onUpload" v-bind:stockid="stockid"></hello>
+      <hello v-on:upload="onUpload" name="recommond" v-bind:stockid="stockid"></hello>
+      <input type="file" @change="filesChange($event)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
     </div>
     <div id="history">
       <smarttable v-bind:titles="titles" v-bind:keys="keys" v-bind:items="items"></smarttable>
