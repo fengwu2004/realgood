@@ -1,0 +1,46 @@
+* {
+  //-webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+body, html {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: 0;
+  font-family: "Microsoft Yahei", "Arial", "Helvetica";
+}
+
+#app {
+
+  width: 90%;
+  margin: 10px auto;
+}
+
+#history {
+
+  width: 90%;
+  margin: 10px auto;
+}
+
+#alertbox {
+
+  z-index: 999;
+}
+
+#doanalyse {
+
+  background-color: dodgerblue;
+  width: 60%;
+  margin: auto;
+  height: 2rem;
+  line-height: 2rem;
+  text-align: center;
+  color: white;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
