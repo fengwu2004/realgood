@@ -115,7 +115,7 @@ function getEntry(globPath) {
     pathname = tmp.splice(0, 1) + '/' + basename; // 正确输出js和html的路径
     entries[pathname] = entry;
   });
-  // console.log(entries);
+  console.log(entries);
   return entries;
 }
 
@@ -132,8 +132,8 @@ for (var pathname in pages) {
     inject: true              // js插入位置
   };
   
-  // console.log('++++++++++++++++')
-  // console.log(conf)
+  console.log('++++++++++++++++')
+  console.log(conf)
   // 需要生成几个html文件，就配置几个HtmlWebpackPlugin对象
   webpackConfig.plugins.push(new HtmlWebpackPlugin(conf));
 }

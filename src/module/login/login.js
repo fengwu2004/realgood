@@ -4,7 +4,7 @@ import $ from 'jquery'
 
 let host = 'http://123.207.213.131:8888/'
 
-let mainurl = './main.html'
+let mainurl = './hub.html'
 
 function saveToLocal(token, username) {
   

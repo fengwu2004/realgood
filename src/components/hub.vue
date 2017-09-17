@@ -3,11 +3,11 @@
     <div class="upload">上传
       <input class="input" type="file" @change="filesChange($event)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
     </div>
-    <div class="upload" v-on:click="showHistory(5)">查看5日历史</div>
-    <div class="upload" v-on:click="showHistory(10)">查看10日历史</div>
-    <div class="upload" v-on:click="showHistory(20)">查看20日历史</div>
-    <div class="upload" v-on:click="showHistory(30)">查看30日历史</div>
-    <div class="upload" v-on:click="showHistory(60)">查看60日历史</div>
+    <div class="upload" v-on:click="showHistory(7)">查看5日历史</div>
+    <div class="upload" v-on:click="showHistory(14)">查看10日历史</div>
+    <div class="upload" v-on:click="showHistory(28)">查看20日历史</div>
+    <div class="upload" v-on:click="showHistory(42)">查看30日历史</div>
+    <div class="upload" v-on:click="showHistory(90)">查看60日历史</div>
     <div v-if="uploading == true">
       <div class="bg"></div>
       <div class="loader"></div>
