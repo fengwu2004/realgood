@@ -33,9 +33,9 @@ function servercallhistoryresult(stockname) {
       
       stock.time = data[i].date
       
-      stock.name = data[i].name
+      stock.name = data[i].consultor.name
       
-      stock.company = data[i].company
+      stock.company = data[i].consultor.company
       
       stocks.push(stock)
     }
