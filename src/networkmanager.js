@@ -1,8 +1,8 @@
 import $ from 'jquery'
 
-let host = 'http://123.207.213.131:8888/'
-// let host = 'http://localhost:8888/'
-let loginUrl = 'http://123.207.213.131:80/dist/login.html'
+// let host = 'http://123.207.213.131:8888/'
+let host = 'http://localhost:8888/'
+let loginUrl = 'http://123.207.213.131:80/dist/module/login.html'
 
 function networkManager() {
 
@@ -15,6 +15,7 @@ function post(url, data, success) {
     type: "POST",
     url: url,
     data: data,
+    timeout:600000,
     success: success,
     dataType: 'json'
   });
@@ -100,7 +101,7 @@ networkManager.prototype.servercalllogin = function(data, success, failed) {
     
     if (res.success == 1) {
       
-      success && success(res.data)
+      success && success(res.token)
     }
   }, function(res) {
     
@@ -170,7 +171,7 @@ networkManager.prototype.getSuggestHistory = function(data, success, failed) {
     
     if (res.success == 1) {
       
-      success && success(res.token)
+      success && success(res.data)
     }
     
     if (res.success == -1) {
