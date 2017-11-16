@@ -3,7 +3,7 @@
     <table v-show="items.length != 0">
       <thead>
       <tr>
-        <th v-for="title in titles" v-bind:key="title">{{ title }}</th>
+        <th v-for="title in titles" v-bind:key="title" v-on:click="onSort(title)">{{ title }}</th>
       </tr>
       </thead>
       <tbody>
@@ -16,6 +16,40 @@
 </template>
 
 <script>
+
+  function getSortKey(title) {
+
+    if (title == "名称") {
+
+      return 'name'
+    }
+
+    if (title == "添加时间") {
+
+      return 'adddate'
+    }
+
+    if (title == "分析师权重") {
+
+      return 'consultor'
+    }
+
+    if (title == "走势权重") {
+
+      return 'trend'
+    }
+
+    if (title == "Total") {
+
+      return 'total'
+    }
+
+    if (title == "涨幅") {
+
+      return 'increase'
+    }
+  }
+
   export default {
     data:function() {
       return {
@@ -25,6 +59,17 @@
     },
     name:'historytable',
     props:['items'],
+    methods: {
+
+      onSort:function(title) {
+
+        var key = getSortKey(title)
+
+        console.log(key)
+
+        this.$emit('letsort', key)
+      }
+    }
   }
 
 </script>

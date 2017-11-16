@@ -17,8 +17,51 @@ function servercallpool() {
       data: function() {
         return {
           stocks:data,
+          reverse:false
         }
       },
+      methods: {
+        
+        doSort:function(key) {
+        
+          this.reverse = !this.reverse
+          
+          if (this.reverse) {
+            
+            if (key == "trend" || key == 'total' || key == 'increase' || key == 'consultor') {
+  
+              this.stocks.sort((x, y) => {
+    
+                return parseFloat(x[key]) < parseFloat(y[key]) ? 1 : -1
+              })
+            }
+            else {
+  
+              this.stocks.sort((x, y) => {
+    
+                return x[key] < y[key] ? 1 : -1
+              })
+            }
+          }
+          else {
+  
+            if (key == "trend" || key == 'total' || key == 'increase' || key == 'consultor') {
+    
+              this.stocks.sort((x, y) => {
+      
+                return parseFloat(x[key]) < parseFloat(y[key]) ? -1 : 1
+              })
+            }
+            else {
+    
+              this.stocks.sort((x, y) => {
+      
+                return x[key] < y[key] ? -1 : 1
+              })
+            }
+          }
+        }
+      }
     })
   })
 }

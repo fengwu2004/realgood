@@ -16,60 +16,100 @@ function getQueryString(name) {
   return null;
 }
 
-function getInstitutions(recommondlist) {
+function getInstitutions(consultor) {
   
-  var str = ''
+  return consultor.company + '(' + consultor.name + ')'
+}
+
+function compareDate(x, y) {
   
-  for (var i = 0; i < recommondlist.length; ++i) {
+  return new Date(x.lasttime) < new Date(y.lasttime) ? 1 : -1
+}
+
+function compareStockname(x, y) {
   
-    if (str != '') {
+  return x.stockname < y.stockname ? -1 : 1
+}
+
+function compareInstitutions(x, y) {
   
-      str += ', '
-    }
+  return x.institutions < y.institutions ? -1 : 1
+}
+
+function compareScore(x, y) {
+  
+  return parseFloat(x.score) < parseFloat(y.score) ? -1 : 1
+}
+
+function addPrefixToStockId(stockId) {
+  
+  if (stockId.indexOf('60') == 0) {
     
-    str += recommondlist[i].company + '(' + recommondlist[i].name + ')'
+    return 'sh' + stockId
   }
   
-  return str
+  return 'sz' + stockId
 }
 
 function servercallhistoryresult(history) {
   
-   network.getSuggestHistory({history:history}, function(data) {
+  network.getSuggestHistory({history:history}, function(suggests) {
     
-    if (!data) {
+    if (!suggests) {
       
       return
     }
+    
+    var items = []
+    
+    for (let i = 0; i < suggests.length; ++i) {
+      
+      var item = {}
+      
+      var suggest = suggests[i]
+      
+      item.stockname = suggest.stockName
   
-     var stocks = []
+      item.lasttime = suggest.date
   
-     for (var key in data) {
-    
-       var stock = {}
-    
-       stock.stockname = key
+      item.institutions = getInstitutions(suggest.consultor)
+      
+      item.kline = 'http://finance.sina.com.cn/realstock/company/' + addPrefixToStockId(suggest.stockId) + '/nc.shtml'
   
-       stock.count = data[key].length
+      items.push(item)
+    }
     
-       stock.lasttime = data[key][0].date
-    
-       stock.institutions = getInstitutions(data[key])
-    
-       stock.suggests = data[key]
-    
-       stocks.push(stock)
-     }
+    new Vue({
+      el: '#app',
+      components: { historytable },
+      data: function() {
+        return {
+          stocks:items
+        }
+      },
+      methods: {
   
-     new Vue({
-       el: '#app',
-       components: { historytable },
-       data: function() {
-         return {
-           stocks:stocks,
-         }
-       },
-     })
+        doSort:function(value) {
+  
+          if (value == 'stockname') {
+  
+            this.stocks.sort(compareStockname)
+          }
+          
+          if (value == 'lasttime') {
+  
+            this.stocks.sort(compareDate)
+          }
+  
+          if (value == 'institutions') {
+  
+            this.stocks.sort(compareInstitutions)
+          }
+  
+          this.stocks.reverse()
+        }
+      }
+    })
   })
 }
 

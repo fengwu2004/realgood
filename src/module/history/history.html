@@ -28,7 +28,7 @@
 </head>
 <body>
 <div id="app" style="width: 100%;margin: 0px auto">
-  <historytable v-bind:items="stocks"></historytable>
+  <historytable v-bind:items="stocks" v-on:sort="doSort"></historytable>
 </div>
 </body>
 </html>

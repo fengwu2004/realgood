@@ -9,7 +9,7 @@
 </head>
 <body>
 <div id="app">
-  <poolstocktable v-bind:items="stocks"></poolstocktable>
+  <poolstocktable v-bind:items="stocks" v-on:letsort="doSort"></poolstocktable>
 </div>
 </body>
 </html>

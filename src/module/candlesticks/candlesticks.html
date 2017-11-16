@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimum-scale=1, maximum-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <script src="http://d3js.org/d3.v4.min.js"></script>
+  <title></title>
+  <style>
+
+    body {
+      font: 10px sans-serif;
+      left:0;
+      right:0;
+      top:0;
+      bottom:0;
+      margin: 0;
+      position: relative;
+    }
+
+    #app {
+
+      display: flex;
+      flex:1;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    text {
+      fill: #000;
+    }
+
+    button {
+      position: absolute;
+      right: 20px;
+      top: 440px;
+      display: none;
+    }
+
+    path.candle {
+      stroke: #000000;
+    }
+
+    path.candle.body {
+      stroke-width: 0;
+    }
+
+    path.candle.down {
+      fill: #00AA00;
+      stroke: #00AA00;
+    }
+
+    path.candle.up {
+      fill: #FF0000;
+      stroke: #FF0000;
+    }
+
+    path.volume {
+      fill: #AAAAAA;
+      opacity: 0.5;
+    }
+
+    path.volume.up {
+      fill: #FF0000;
+    }
+
+    path.volume.down {
+      fill: #00AA00;
+    }
+
+    .candlestick {
+
+      width: 400px;
+      height: 300px;
+    }
+
+    .volume {
+
+      width: 400px;
+      height: 200px;
+    }
+
+    .item {
+
+
+    }
+
+  </style>
+</head>
+<body>
+<div id="app">
+  <candlestick class="item" v-for="stock in stocks" v-bind:key="stock.stockid" v-bind:stock="stock"></candlestick>
+</div>
+</body>
+</html>
