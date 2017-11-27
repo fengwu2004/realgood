@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimum-scale=1, maximum-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title></title>
+  <title>申万一级行业</title>
   <style>
     * {
       -webkit-touch-callout: none;
@@ -24,23 +24,11 @@
       width: 90%;
       margin: 10px auto; }
 
-    #candlestick {
-
-      padding: 10px;
-      height: 2rem;
-      width: 30%;
-      margin: 10px auto 20px;
-      background-color: aqua;
-      text-align: center;
-      line-height: 2rem;
-    }
-
   </style>
 </head>
 <body>
-<div id="candlestick" v-on:click="showcandlesticks">年线</div>
 <div id="app" style="width: 100%;margin: 0px auto">
-  <historytable v-bind:items="stocks" v-on:sort="doSort"></historytable>
+  <industrytable v-bind:items="items"></industrytable>
 </div>
 </body>
 </html>

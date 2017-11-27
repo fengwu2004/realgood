@@ -3,13 +3,12 @@
     <table v-show="items.length != 0">
       <thead>
       <tr>
-        <th v-for="title in titles" v-bind:key="title" v-on:click="onSort(title)">{{ title }}</th>
+        <th v-for="title in titles" v-bind:key="title">{{ title }}</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="item in items" v-on:click="onClick(item)">
-        <td v-for="key in keys">{{ item[key] }}</td>
-        <td><a v-bind:href="item['kline']">日k线</a></td>
+        <td>{{ item }}</td>
       </tr>
       </tbody>
     </table>
@@ -20,38 +19,16 @@
   export default {
     data:function() {
       return {
-        titles:['时间', '股票', '机构', 'High', 'low', 'k线',],
-        keys:['lasttime', 'stockname', 'institutions', 'high', 'low'],
+        titles:['行业'],
+        keys:['firstindustry'],
       }
     },
-    name:'historytable',
+    name:'industrytable',
     props:['items'],
     methods:{
       onClick:function(item) {
 
-//        window.location = './historydetail.html?stockname=' + item.stockname
-      },
-      onSort:function(key) {
-
-        if (key == '股票') {
-
-          this.$emit('sort', 'stockname')
-        }
-
-        if (key == '时间') {
-
-          this.$emit('sort', 'lasttime')
-        }
-
-        if (key == '机构') {
-
-          this.$emit('sort', 'institutions')
-        }
-
-        if (key == '分数') {
-
-          this.$emit('sort', 'score')
-        }
+        window.location = './candlesticks.html?industry=' + item
       }
     }
   }

@@ -15,6 +15,7 @@
       top:0;
       bottom:0;
       margin: 0;
+      background-color: black;
       position: relative;
     }
 
@@ -23,7 +24,7 @@
       display: flex;
       flex:1;
       flex-wrap: wrap;
-      justify-content: space-around;
+      justify-content: space-between;
     }
 
     text {
@@ -82,12 +83,22 @@
 
     .item {
 
+      margin: 20px;
+      background-color: whitesmoke;
+    }
 
+    .slider {
+
+      margin: 60px auto ;
+      width: 800px;
     }
 
   </style>
 </head>
 <body>
+<div id="slider">
+  <vue-slider class="slider" v-model="value" v-bind:width="800" v-bind:height="25" v-bind:lazy="true"></vue-slider>
+</div>
 <div id="app">
   <candlestick class="item" v-for="stock in stocks" v-bind:key="stock.stockid" v-bind:stock="stock"></candlestick>
 </div>

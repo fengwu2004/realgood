@@ -1,7 +1,7 @@
 import $ from 'jquery'
 
-let host = 'http://123.207.213.131:8888/'
-// let host = 'http://localhost:8888/'
+// let host = 'http://192.168.31.215:8888/'
+let host = 'http://localhost:8888/'
 let loginUrl = 'http://123.207.213.131:80/dist/module/login.html'
 
 function networkManager() {
@@ -168,6 +168,77 @@ networkManager.prototype.getSuggestHistory = function(data, success, failed) {
   data.token = window.localStorage.getItem('token')
   
   post(url, JSON.stringify(data), function(res) {
+    
+    if (res.success == 1) {
+      
+      success && success(res.data)
+    }
+    
+    if (res.success == -1) {
+      
+      window.location = loginUrl
+    }
+  }, function(res) {
+    
+    console.log(JSON.stringify(res))
+    
+    failed && failed(res)
+  })
+}
+
+networkManager.prototype.getSuggestCandlesticks = function(data, success, failed) {
+  
+  var url = host + 'history/suggest/candlestick'
+  
+  data.token = window.localStorage.getItem('token')
+  
+  post(url, JSON.stringify(data), function(res) {
+    
+    if (res.success == 1) {
+      
+      success && success(res.data)
+    }
+    
+    if (res.success == -1) {
+      
+      window.location = loginUrl
+    }
+  }, function(res) {
+    
+    console.log(JSON.stringify(res))
+    
+    failed && failed(res)
+  })
+}
+
+networkManager.prototype.getIndustryCandlesticks = function(data, success, failed) {
+  
+  var url = host + 'industry'
+  
+  post(url, JSON.stringify(data), function(res) {
+    
+    if (res.success == 1) {
+      
+      success && success(res.data)
+    }
+    
+    if (res.success == -1) {
+      
+      window.location = loginUrl
+    }
+  }, function(res) {
+    
+    console.log(JSON.stringify(res))
+    
+    failed && failed(res)
+  })
+}
+
+networkManager.prototype.getAllIndustry = function( success, failed) {
+  
+  var url = host + 'allindustry'
+  
+  post(url, {}, function(res) {
     
     if (res.success == 1) {
       

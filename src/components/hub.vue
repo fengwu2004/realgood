@@ -9,6 +9,7 @@
     <div class="upload" v-on:click="showHistory(20)">查看20日历史</div>
     <div class="upload" v-on:click="showHistory(30)">查看30日历史</div>
     <div class="upload" v-on:click="showHistory(60)">查看60日历史</div>
+    <div class="upload" v-on:click="showIndustry">查看所有行业</div>
     <div v-if="uploading == true">
       <div class="bg"></div>
       <div class="loader"></div>
@@ -49,6 +50,10 @@
       showHistory:function(value) {
 
         window.location = './history.html?history=' + value
+      },
+      showIndustry:function() {
+
+        window.location = './industry.html'
       },
       showPool:function() {
 

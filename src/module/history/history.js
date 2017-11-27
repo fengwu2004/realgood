@@ -74,6 +74,10 @@ function servercallhistoryresult(history) {
   
       item.institutions = getInstitutions(suggest.consultor)
       
+      item.high = suggest.high
+      
+      item.low = suggest.low
+      
       item.kline = 'http://finance.sina.com.cn/realstock/company/' + addPrefixToStockId(suggest.stockId) + '/nc.shtml'
   
       items.push(item)
@@ -121,5 +125,17 @@ function onLoad() {
   
   servercallhistoryresult(history)
 }
+
+var _showcandle = new Vue({
+  el:'#candlestick',
+  methods: {
+    showcandlesticks: function() {
+  
+      var history = getQueryString('history')
+      
+      window.location = './candlesticks.html?history=' + history
+    }
+  }
+})
 
 onLoad()

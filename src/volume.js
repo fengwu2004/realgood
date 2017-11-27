@@ -1,13 +1,13 @@
 import techan from 'techan'
 import * as d3 from 'd3'
 
-var parseDate = d3.timeParse("%d-%b-%y");
+var parseDate = d3.timeParse("%Y/%m/%d");
 
 export default class Volume {
   
   constructor(data, width, height, domId) {
     
-    var margin = {top: 20, right: 20, bottom: 30, left: 50}
+    var margin = {top: 0, right: 0, bottom: 20, left: 40}
     
     this.width = width
     
@@ -21,15 +21,31 @@ export default class Volume {
     
     this.volume = techan.plot.volume().accessor(techan.accessor.ohlc()).xScale(this.x).yScale(this.y)
     
-    this.xAxis = d3.axisBottom().scale(this.x)
+    this.xAxis = d3.axisBottom(this.x)
     
-    this.yAxis = d3.axisLeft().scale(this.y)
+    this.yAxis = d3.axisLeft(this.y).tickFormat(d3.format(',.3s'))
     
     this.svg = d3.select(domId).append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+  }
+  
+  refresh(length) {
+    
+    var data = null
+    
+    if (this.data.length < length) {
+      
+      data = this.data.slice(0)
+    }
+    else {
+      
+      data = this.data.slice(this.data.length - length)
+    }
+    
+    this.draw(data)
   }
   
   draw(data) {
@@ -75,7 +91,7 @@ export default class Volume {
       .attr("dy", ".71em")
       .style("text-anchor", "end")
       .text("Volume");
-  
+    
     // Data to display initially
     this.draw(this.data);
   }
