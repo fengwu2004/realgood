@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimum-scale=1, maximum-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <script src="http://d3js.org/d3.v4.min.js"></script>
   <title></title>
   <style>
 
@@ -13,13 +14,6 @@
 
     text {
       fill: #000;
-    }
-
-    button {
-      position: absolute;
-      right: 20px;
-      top: 440px;
-      display: none;
     }
 
     path.candle {
@@ -38,6 +32,12 @@
     path.candle.down {
       fill: #FF0000;
       stroke: #FF0000;
+    }
+
+    rect.pane {
+      cursor: move;
+      fill: none;
+      pointer-events: all;
     }
 
   </style>
