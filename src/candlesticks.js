@@ -23,9 +23,9 @@ export default class CandleSticks {
   
     this.candlestick = techan.plot.candlestick().xScale(this.x).yScale(this.y)
   
-    this.xAxis = d3.axisBottom().scale(this.x)
+    this.xAxis = d3.axisBottom(this.x)
   
-    this.yAxis = d3.axisLeft().scale(this.y)
+    this.yAxis = d3.axisLeft(this.y)
   
     this.svg = d3.select(domId).append("svg")
       .attr("width", width + margin.left + margin.right)
@@ -33,7 +33,37 @@ export default class CandleSticks {
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     
-    this.zoomableInit = this.x.zoomable().clamp(false).copy();
+    this.svg.append("clipPath")
+      .attr("id", "clip")
+      .append("rect")
+      .attr("x", 0)
+      .attr("y", this.y(1))
+      .attr("width", this.width)
+      .attr("height", this.y(0) - this.y(1));
+  
+    this.svg.append("g")
+      .attr("class", "candlestick")
+      .attr("clip-path", "url(#clip)");
+  
+    this.svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + this.height + ")");
+  
+    this.svg.append("g")
+      .attr("class", "y axis")
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Price ($)");
+  
+    this.svg.append("rect")
+      .attr("class", "pane")
+      .attr("width", this.width)
+      .attr("height", this.height)
+      .call(this.zoom);
+    // Data to display initially
   }
   
   zoomed() {
@@ -89,39 +119,7 @@ export default class CandleSticks {
         volume: +d.Volume
       };
     }).sort((a, b) => { return d3.ascending(accessor.d(a), accessor.d(b)); });
-  
-    this.svg.append("clipPath")
-      .attr("id", "clip")
-      .append("rect")
-      .attr("x", 0)
-      .attr("y", this.y(1))
-      .attr("width", this.width)
-      .attr("height", this.y(0) - this.y(1));
-  
-    this.svg.append("g")
-      .attr("class", "candlestick")
-      .attr("clip-path", "url(#clip)");
-  
-    this.svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + this.height + ")");
-  
-    this.svg.append("g")
-      .attr("class", "y axis")
-      .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Price ($)");
-  
-    this.svg.append("rect")
-      .attr("class", "pane")
-      .attr("width", this.width)
-      .attr("height", this.height)
-      .call(this.zoom);
-    // Data to display initially
-  
+    
     this.x.domain(this.data.map(accessor.d));
   
     this.y.domain(techan.scale.plot.ohlc(this.data, accessor).domain());
@@ -129,5 +127,7 @@ export default class CandleSticks {
     this.svg.select("g.candlestick").datum(this.data);
     
     this.draw(this.data)
+  
+    this.zoomableInit = this.x.zoomable().clamp(false).copy();
   }
 }
