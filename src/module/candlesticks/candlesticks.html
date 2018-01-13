@@ -71,8 +71,8 @@
 
     .candlestick {
 
-      width: 400px;
-      height: 300px;
+      width: 460px;
+      height: 450px;
     }
 
     .volume {
@@ -83,7 +83,7 @@
 
     .item {
 
-      margin: 20px;
+      margin: 15px;
       background-color: whitesmoke;
     }
 
@@ -103,10 +103,10 @@
 </head>
 <body>
 <div id="slider">
-  <vue-slider class="slider" v-model="value" v-bind:width="800" v-bind:height="25" v-bind:lazy="true"></vue-slider>
+  <!--<vue-slider class="slider" v-model="value" v-bind:width="800" v-bind:height="25" v-bind:lazy="true"></vue-slider>-->
 </div>
 <div id="app">
-  <candlestick class="item" v-for="stock in stocks" v-bind:key="stock.stockid" v-bind:stock="stock"></candlestick>
+  <candlestick v-on:add="addToSelfSelect" class="item" v-for="stock in stocks" v-bind:key="stock.stockid" v-bind:stock="stock"></candlestick>
 </div>
 </body>
 </html>

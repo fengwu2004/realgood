@@ -3,131 +3,148 @@ import * as d3 from 'd3'
 
 var parseDate = d3.timeParse("%Y/%m/%d");
 
-export default class CandleSticks {
+export default function CandleSticks(data, width, height, domId) {
   
-  constructor(data, width, height, domId) {
+  var margin = {top: 0, right: 0, bottom: 20, left: 60}
   
-    var margin = {top: 0, right: 0, bottom: 20, left: 40}
-    
-    this.width = width
-    
-    this.height = height
+  var volumeHeight = 100
   
-    this.data = data
-    
-    this.x = techan.scale.financetime().range([0, width])
+  var zoom = d3.zoom()
+    .on("zoom", zoomed);
   
-    this.y = d3.scaleLinear().range([height, 0])
-    
-    this.zoom = d3.zoom().on('zoom', () => this.zoomed())
+  var x = techan.scale.financetime()
+    .range([0, width]);
   
-    this.candlestick = techan.plot.candlestick().xScale(this.x).yScale(this.y)
+  var yCandlestick = d3.scaleLinear()
+    .range([height - volumeHeight, 0]);
   
-    this.xAxis = d3.axisBottom(this.x)
+  var y = d3.scaleLinear()
+    .range([height, 0])
   
-    this.yAxis = d3.axisLeft(this.y)
+  var yPercent = y.copy();   // Same as y at this stage, will get a different domain later
   
-    this.svg = d3.select(domId).append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-    
-    this.svg.append("clipPath")
-      .attr("id", "clip")
-      .append("rect")
-      .attr("x", 0)
-      .attr("y", this.y(1))
-      .attr("width", this.width)
-      .attr("height", this.y(0) - this.y(1));
+  var yVolume = d3.scaleLinear()
+    .range([height, height - volumeHeight]);
   
-    this.svg.append("g")
-      .attr("class", "candlestick")
-      .attr("clip-path", "url(#clip)");
+  var yInit, yPercentInit, zoomableInit;
   
-    this.svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + this.height + ")");
+  var candlestick = techan.plot.candlestick()
+    .xScale(x)
+    .yScale(y);
+
+  var volume = techan.plot.volume()
+    .accessor(candlestick.accessor())   // Set the accessor to a ohlc accessor so we get highlighted bars
+    .xScale(x)
+    .yScale(yVolume);
   
-    this.svg.append("g")
-      .attr("class", "y axis")
-      .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Price ($)");
+  var xAxis = d3.axisBottom(x)
+    .ticks(4);
   
-    this.svg.append("rect")
-      .attr("class", "pane")
-      .attr("width", this.width)
-      .attr("height", this.height)
-      .call(this.zoom);
-    // Data to display initially
+  var yAxis = d3.axisRight(y)
+    .ticks(4);
+  
+  var percentAxis = d3.axisLeft(yPercent)
+    .ticks(4)
+    .tickFormat(d3.format('+.1%'));
+  
+  var volumeAxis = d3.axisRight(yVolume)
+    .ticks(2)
+    .tickFormat(d3.format(",.3s"));
+  
+  var svg = d3.select(domId).append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  
+  svg.append("clipPath")
+    .attr("id", "clip")
+    .append("rect")
+    .attr("x", 0)
+    .attr("y", y(1))
+    .attr("width", width)
+    .attr("height", y(0) - y(1));
+  
+  svg.append("g")
+    .attr("class", "volume")
+    .attr("clip-path", "url(#clip)");
+  
+  svg.append("g")
+    .attr("class", "candlestick")
+    .attr("clip-path", "url(#clip)");
+  
+  svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")");
+  
+  svg.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + width + ",0)");
+  
+  svg.append("g")
+    .attr("class", "percent axis");
+  
+  svg.append("g")
+    .attr("class", "volume axis");
+  
+  svg.append("rect")
+    .attr("class", "pane")
+    .attr("width", width)
+    .attr("height", height)
+    .call(zoom);
+  
+  var accessor = candlestick.accessor(),
+    indicatorPreRoll = 0;
+  
+  data = data.map(function(d) {
+    return {
+      date: parseDate(d.Date),
+      open: +d.Open,
+      high: +d.High,
+      low: +d.Low,
+      close: +d.Close,
+      volume: +d.Volume
+    };
+  }).sort((a, b) => { return d3.ascending(accessor.d(a), accessor.d(b)); });
+  
+  x.domain(techan.scale.plot.time(data, accessor).domain());
+  y.domain(techan.scale.plot.ohlc(data.slice(indicatorPreRoll), accessor).domain());
+  yPercent.domain(techan.scale.plot.percent(y, accessor(data[indicatorPreRoll])).domain());
+  yVolume.domain(techan.scale.plot.volume(data, accessor.v).domain());
+  
+  svg.select("g.candlestick").datum(data).call(candlestick);
+  svg.select("g.volume").datum(data).call(volume);
+  
+  zoomableInit = x.zoomable().domain([indicatorPreRoll, data.length]).copy(); // Zoom in a little to hide indicator preroll
+  yInit = y.copy();
+  yPercentInit = yPercent.copy();
+  
+  draw()
+  
+  function refresh(length) {
+  
+  
   }
   
-  zoomed() {
-  
-    var rescaledY = d3.event.transform.rescaleY(this.y);
-  
-    this.yAxis.scale(rescaledY);
+  function draw() {
     
-    this.candlestick.yScale(rescaledY);
-  
-    // Emulates D3 behaviour, required for financetime due to secondary zoomable scale
-    this.x.zoomable().domain(d3.event.transform.rescaleX(this.zoomableInit).domain());
-  
-    this.draw();
+    svg.select("g.x.axis").call(xAxis);
+    svg.select("g.y.axis").call(yAxis);
+    svg.select("g.volume.axis").call(volumeAxis);
+    svg.select("g.percent.axis").call(percentAxis);
+    
+    // We know the data does not change, a simple refresh that does not perform data joins will suffice.
+    svg.select("g.candlestick").call(candlestick.refresh);
+    svg.select("g.volume").call(volume.refresh);
   }
   
-  draw(data) {
+  function zoomed() {
+    x.zoomable().domain(d3.event.transform.rescaleX(zoomableInit).domain());
+    y.domain(d3.event.transform.rescaleY(yInit).domain());
+    yPercent.domain(d3.event.transform.rescaleY(yPercentInit).domain());
     
-    this.svg.select("g.candlestick").call(this.candlestick)
-    
-    this.svg.select("g.x.axis").call(this.xAxis)
-    
-    this.svg.select("g.y.axis").call(this.yAxis)
+    draw();
   }
   
-  refresh(length) {
-  
-    var data = null
-    
-    if (this.data.length < length) {
-  
-      data = this.data.slice(0)
-    }
-    else {
-  
-      data = this.data.slice(this.data.length - length)
-    }
-    
-    this.draw(data)
-  }
-  
-  init() {
-  
-    var accessor = this.candlestick.accessor()
-    
-    this.data = this.data.map(function(d) {
-      return {
-        date: parseDate(d.Date),
-        open: +d.Open,
-        high: +d.High,
-        low: +d.Low,
-        close: +d.Close,
-        volume: +d.Volume
-      };
-    }).sort((a, b) => { return d3.ascending(accessor.d(a), accessor.d(b)); });
-    
-    this.x.domain(this.data.map(accessor.d));
-  
-    this.y.domain(techan.scale.plot.ohlc(this.data, accessor).domain());
-  
-    this.svg.select("g.candlestick").datum(this.data);
-    
-    this.draw(this.data)
-  
-    this.zoomableInit = this.x.zoomable().clamp(false).copy();
-  }
+  this.refresh = refresh
 }

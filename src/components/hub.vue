@@ -10,6 +10,7 @@
     <div class="upload" v-on:click="showHistory(30)">查看30日历史</div>
     <div class="upload" v-on:click="showHistory(60)">查看60日历史</div>
     <div class="upload" v-on:click="showIndustry">查看所有行业</div>
+    <div class="upload" v-on:click="showSelfSelect">我的自选股</div>
     <div v-if="uploading == true">
       <div class="bg"></div>
       <div class="loader"></div>
@@ -58,6 +59,10 @@
       showPool:function() {
 
         window.location = './pool.html'
+      },
+      showSelfSelect:function() {
+
+        window.location = './candlesticks.html'
       }
     },
   }

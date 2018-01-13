@@ -1,8 +1,8 @@
 import $ from 'jquery'
 
-// let host = 'http://192.168.31.214:8888/'
-let host = 'http://localhost:8888/'
-let loginUrl = 'http://123.207.213.131:80/dist/module/login.html'
+let host = 'http://123.206.230.152:8888/'
+// let host = 'http://localhost:8888/'
+let loginUrl = 'http://123.206.230.152:80/dist/module/login.html'
 
 function networkManager() {
 
@@ -166,6 +166,52 @@ networkManager.prototype.getSuggestHistory = function(data, success, failed) {
   var url = host + 'history/suggest'
   
   data.token = window.localStorage.getItem('token')
+  
+  post(url, JSON.stringify(data), function(res) {
+    
+    if (res.success == 1) {
+      
+      success && success(res.data)
+    }
+    
+    if (res.success == -1) {
+      
+      window.location = loginUrl
+    }
+  }, function(res) {
+    
+    console.log(JSON.stringify(res))
+    
+    failed && failed(res)
+  })
+}
+
+networkManager.prototype.getSelfSelectCandlesticks = function(success, failed) {
+  
+  var url = host + 'getSelfSelect'
+  
+  post(url, {}, function(res) {
+    
+    if (res.success == 1) {
+      
+      success && success(res.data)
+    }
+    
+    if (res.success == -1) {
+      
+      window.location = loginUrl
+    }
+  }, function(res) {
+    
+    console.log(JSON.stringify(res))
+    
+    failed && failed(res)
+  })
+}
+
+networkManager.prototype.addToSelfSelect = function(data, success, failed) {
+  
+  var url = host + 'addtoselfselect'
   
   post(url, JSON.stringify(data), function(res) {
     

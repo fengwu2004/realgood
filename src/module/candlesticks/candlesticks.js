@@ -290,7 +290,7 @@ function retriveSuggestStocks(history) {
       stocks.push(stock)
     }
     
-    initComponent(stocks)
+    initComponent(stocks.slice(0, 1))
   })
 }
 
@@ -313,6 +313,8 @@ function retriveIndustryStocks(industry) {
       stock.pe = stockinfo.pe
       
       stock.values = stockinfo.stock.dayvalues
+  
+      stock.isselfselect = stockinfo.isselfselect
       
       maxdays = Math.max(maxdays, stock.values.length)
       
@@ -339,7 +341,7 @@ function onload() {
   if (history) {
   
     retriveSuggestStocks(history)
-    
+  
     return
   }
   
@@ -348,7 +350,51 @@ function onload() {
   if (industry) {
   
     retriveIndustryStocks(industry)
+  
+    return
   }
+  
+  retriveSelfSelectStocks()
+}
+
+function retriveSelfSelectStocks() {
+  
+  var stocks = []
+  
+  network.getSelfSelectCandlesticks(stockinfos => {
+    
+    for (var i = 0; i < stockinfos.length; ++i) {
+      
+      var stockinfo =  stockinfos[i]
+      
+      var stock = {}
+      
+      stock.name = stockinfo.stock.name
+      
+      stock.stockid = stockinfo.stock.id
+      
+      stock.pe = stockinfo.pe
+      
+      stock.values = stockinfo.stock.dayvalues
+  
+      stock.isselfselect = stockinfo.isselfselect
+      
+      maxdays = Math.max(maxdays, stock.values.length)
+      
+      if (stock.values.length == 0) {
+        
+        stock.marketcap = '-- 亿'
+      }
+      else {
+        
+        stock.marketcap = Math.ceil(stockinfo.marketcap * stock.values[stock.values.length - 1].Close) + '亿'
+      }
+      
+      stocks.push(stock)
+    }
+    
+    initComponent(stocks)
+  })
 }
 
 var candlesticks = []
@@ -370,17 +416,31 @@ function initComponent(stocks) {
       
       for (var i = 0; i < this.stocks.length; ++i) {
         
-        var candlestick = new CandleSticks(this.stocks[i].values, 360, 280, '#' + 'candlestick' + this.stocks[i].stockid)
-        
-        candlestick.init()
+        if (this.stocks[i].values.length != 0) {
   
-        candlesticks.push(candlestick)
+          var candlestick = new CandleSticks(this.stocks[i].values, 380, 400, '#' + 'candlestick' + this.stocks[i].stockid)
+  
+          candlesticks.push(candlestick)
+        }
+      }
+    },
+    methods:{
+      addToSelfSelect:function(stockId, add) {
+      
+        var stocks = this.stocks
         
-        var volume = new Volume(this.stocks[i].values, 360, 180, '#' + 'volume' + this.stocks[i].stockid)
+        network.addToSelfSelect({stockId:stockId, add:add}, () => {
         
-        volume.init()
-        
-        volums.push(volume)
+          for (let i = 0; i < stocks.length; ++i) {
+          
+            if (stocks[i].stockid == stockId) {
+  
+              stocks[i].isselfselect = !stocks[i].isselfselect
+              
+              break
+            }
+          }
+        })
       }
     }
   })
@@ -403,18 +463,18 @@ function refresh(value) {
 
 onload()
 
-var _vm = new Vue({
-  el:'#slider',
-  data:function() {
-    return {
-      value:0
-    }
-  },
-  watch:{
-    value:function(newvalue) {
-  
-      refresh(newvalue)
-    }
-  },
-  components: { vueSlider },
-})
+// var _vm = new Vue({
+//   el:'#slider',
+//   data:function() {
+//     return {
+//       value:0
+//     }
+//   },
+//   watch:{
+//     value:function(newvalue) {
+//
+//       refresh(newvalue)
+//     }
+//   },
+//   components: { vueSlider },
+// })

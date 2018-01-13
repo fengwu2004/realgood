@@ -12,8 +12,12 @@
       font: 10px sans-serif;
     }
 
-    text {
-      fill: #000;
+    .axis text {
+      font-size: 6px;
+    }
+
+    text.symbol {
+      fill: #BBBBBB;
     }
 
     path.candle {
@@ -34,55 +38,37 @@
       stroke: #FF0000;
     }
 
+    path.volume {
+      fill: #DDDDDD;
+    }
+
     rect.pane {
       cursor: move;
       fill: none;
       pointer-events: all;
     }
 
-    .checkbox5 {
-      width: 25px;
-      margin: 20px 100px;
-      position: relative;
+    .indicator path.line {
+      fill: none;
+      stroke-width: 1;
     }
 
-    .checkbox5 label {
-      cursor: pointer;
+    .ma-0 path.line {
+      stroke: #1f77b4;
+    }
+
+    .ma-1 path.line {
+      stroke: #aec7e8;
+    }
+
+    .ma-2 path.line {
+      stroke: #ff7f0e;
+    }
+
+    button {
       position: absolute;
-      width: 25px;
-      height: 25px;
-      top: 0;
-      left: 0;
-      background: #eee;
-      border:1px solid #ddd;
-    }
-
-    .checkbox5 label:after {
-      opacity: 0.2;
-      content: '';
-      position: absolute;
-      width: 9px;
-      height: 5px;
-      background: transparent;
-      top: 6px;
-      left: 7px;
-      border: 3px solid #333;
-      border-top: none;
-      border-right: none;
-
-      -webkit-transform: rotate(-45deg);
-      -moz-transform: rotate(-45deg);
-      -o-transform: rotate(-45deg);
-      -ms-transform: rotate(-45deg);
-      transform: rotate(-45deg);
-    }
-
-    .checkbox5 label:hover::after {
-      opacity: 0.5;
-    }
-
-    .checkbox5 input[type=checkbox]:checked + label:after {
-      opacity: 1;
+      right: 110px;
+      top: 25px;
     }
 
   </style>
