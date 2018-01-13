@@ -401,6 +401,10 @@ var candlesticks = []
 
 var volums = []
 
+var u = navigator.userAgent;
+
+var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
 function initComponent(stocks) {
   
   new Vue({
@@ -418,8 +422,17 @@ function initComponent(stocks) {
         
         if (this.stocks[i].values.length != 0) {
   
-          var candlestick = new CandleSticks(this.stocks[i].values, 380, 400, '#' + 'candlestick' + this.stocks[i].stockid)
+          var candlestick = null
+    
+            if (isiOS) {
   
+              candlestick = new CandleSticks(this.stocks[i].values, 350, 400, '#' + 'candlestick' + this.stocks[i].stockid)
+          }
+          else {
+  
+              candlestick = new CandleSticks(this.stocks[i].values, 380, 400, '#' + 'candlestick' + this.stocks[i].stockid)
+          }
+          
           candlesticks.push(candlestick)
         }
       }

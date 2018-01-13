@@ -5,7 +5,7 @@ var parseDate = d3.timeParse("%Y/%m/%d");
 
 export default function CandleSticks(data, width, height, domId) {
   
-  var margin = {top: 0, right: 0, bottom: 20, left: 60}
+  var margin = {top: 0, right: 30, bottom: 20, left: 30}
   
   var volumeHeight = 100
   
@@ -139,8 +139,18 @@ export default function CandleSticks(data, width, height, domId) {
   }
   
   function zoomed() {
-    x.zoomable().domain(d3.event.transform.rescaleX(zoomableInit).domain());
+    
+    var v = d3.event.transform.rescaleX(zoomableInit).domain()
+    
+    if (v[1] - v[0] < 20) {
+      
+      return
+    }
+    
+    x.zoomable().domain(v);
+    
     y.domain(d3.event.transform.rescaleY(yInit).domain());
+    
     yPercent.domain(d3.event.transform.rescaleY(yPercentInit).domain());
     
     draw();

@@ -61,7 +61,7 @@
 
     line-height: 30px;
     color: red;
-    font-size: 1rem;
+    font-size: 0.8rem;
     padding-left: 10px;
     padding-right: 10px;
   }
@@ -69,9 +69,12 @@
   .btn {
 
     width: 120px;
-    height: 30px;
+    height: 25px;
+    right: 0;
+    margin: 2.5px;
+    position: absolute;
     background: #00AA00;
-    line-height: 30px;
+    line-height: 25px;
     color: white;
   }
 
